@@ -21,6 +21,12 @@ provider:
   variableSyntax: "\\${((?!AWS|SecretName)[ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)\\*\\?]+?)}"
   environment:
     IS_OFFLINE: ${self:custom.offlineMode}
+    IMAGE_BUCKET: ${self:custom.bucket.name}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: '*'
 
 functions:
   TestLambda:
@@ -30,6 +36,16 @@ functions:
       - http:
           path: pet/test-one
           method: get
+          cors: true
+    warmup: false
+
+  S3Upload:
+    handler: src/lambdas/uploadImageToS3.handler
+    name: pet-s3-upload
+    events:
+      - http:
+          path: pet/s3-upload
+          method: post
           cors: true
     warmup: false
 
