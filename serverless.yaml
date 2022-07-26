@@ -1,0 +1,54 @@
+service: pet-aws
+useDotenv: true
+resources: ${file(resources.yaml)}
+
+plugins:
+  - serverless-offline
+  - serverless-iam-roles-per-function
+  - serverless-webpack
+  - serverless-plugin-warmup
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ca-central-1'}
+  memorySize: 512
+  timeout: 30
+  versionFunctions: false
+  apiGateway:
+    shouldStartNameWithService: true
+  variableSyntax: "\\${((?!AWS|SecretName)[ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)\\*\\?]+?)}"
+  environment:
+    IS_OFFLINE: ${self:custom.offlineMode}
+
+functions:
+  TestLambda:
+    handler: src/lambdas/getDefaultResponse.handler
+    name: pet-lambda
+    events:
+      - http:
+          path: pet/test-one
+          method: get
+          cors: true
+    warmup: false
+
+
+custom:
+  offlineMode: ${env:IS_OFFLINE}
+  servicePrefix: ${self:service}-${self:provider.stage}
+  webpack:
+    webpackConfig: webpack.config.ts
+    includeModules: true
+    packager: npm
+  warmup:
+    enabled: true
+    memorySize: 512
+    events:
+      - schedule: rate(5 minutes)
+    concurrency: 1
+    timeout: 120
+    prewarm: true
+  bucket:
+    name: 'pet-aws-bucket'
+  

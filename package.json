@@ -1,0 +1,46 @@
+{
+  "name": "pet-aws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sls": "serverless -c ./serverless.yaml",
+    "build": "npm run sls package",
+    "deploy": "npm run sls deploy -- -v",
+    "undeploy": "npm run sls remove",
+    "start": "npm run sls offline start -- --skipCacheInvalidation",
+    "tslint": "eslint --ext .ts ./src"
+  },
+  "author": "Nikita Harzha",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^15.6.2",
+    "@types/webpack": "^4.41.25",
+    "@types/webpack-node-externals": "^2.5.1",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "aws-sdk": "^2.919.0",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.23.4",
+    "serverless": "^2.43.1",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-offline": "^7.0.0",
+    "serverless-plugin-warmup": "^4.9.0",
+    "serverless-webpack": "^5.5.0",
+    "source-map-loader": "^3.0.0",
+    "ts-loader": "^9.2.2",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
+    "typescript": "^4.3.2",
+    "webpack": "^5.11.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.13.0",
+    "@hapi/boom": "^9.1.2",
+    "@lambda-team/ltdl": "^1.2.3",
+    "aws-lambda": "^1.0.6",
+    "joi": "^17.4.0",
+    "middy": "^0.36.0"
+  }
+}
